@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Post Image
 Plugin URI: http://github/url
-Description: Plugin displays featured image or thumbnail from post in template. Prints img tag or returns url to image
+Description: Plugin display featured image or thumbnail from post in template. Prints img tag or returns url to image
 Version: 1.0
 Author: Bogdan Dever
 Author URI: http://www.twitter.com/bogvsdev
