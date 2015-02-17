@@ -1,5 +1,7 @@
 # WP Post Image
 
+Main goal of plugin to print image from post in loop of template. Not all wordpress themes print images from posts as a thumbnail in loop. Almost all the time themes support only post thumbnails, but not always in post editor sets this thumbnail. More often we just publish uploaded or external image. WP Post Image plugin solves this problem.
+
 Plugin by default searching for any kind of image in post (pasted image, uploaded image or thumbnail), but if nothing found, then plugin prints image by default, which you can upload or paste link to it by yourself.
 Supported formats of images:jpg, jpeg, bmp, png.
 
