@@ -1,20 +1,20 @@
 <?php 
 /*
-Plugin Name: WP Post Image
+Plugin Name: WP Get Post Image
 Plugin URI: http://github/url
-Description: Plugin display featured image or thumbnail from post in template. Prints img tag or returns url to image
+Description: Plugin displays featured image or thumbnail from post in template. Prints img tag or returns url to image
 Version: 1.0
 Author: Bogdan Dever
 Author URI: http://www.twitter.com/bogvsdev
 */
-add_action('admin_menu', 'wp_post_image_menu');
+add_action('admin_menu', 'wp_get_post_image_menu');
 
 
-function wp_post_image_menu(){
-	add_options_page('WP Post Image settings', 'WP Post Image', 8, basename(__FILE__), 'wp_post_image_options_page');
+function wp_get_post_image_menu(){
+	add_options_page('WP Get Post Image settings', 'WP Get Post Image', 8, basename(__FILE__), 'wp_get_post_image_options_page');
 }
 
-function wp_post_image_options_page(){
+function wp_get_post_image_options_page(){
 	$updated = false;
 	if ($_POST) {
 		update_option('wp_pi_defsrc', $_POST['wp_pi_defsrc']);
@@ -35,7 +35,7 @@ function wp_post_image_options_page(){
 	wp_enqueue_script('jquery');
 	wp_enqueue_media();
 	?>
-	<div class="wrap"><h2>WP Post Image settings</h2>
+	<div class="wrap"><h2>WP Get Post Image settings</h2>
 		<?php if($updated) { ?>
 		<div id="message" class="updated"><p>Changes successfully saved.</p></div>
 		<?php } ?>
@@ -48,25 +48,25 @@ function wp_post_image_options_page(){
 				In order to use plugin in your template pick appropriate function.
 			</p>
 			<p>
-				1) <code>the_wp_post_image($classes)</code> <br>
+				1) <code>the_post_image($classes)</code> <br>
 				Use this function in loop. Function prints img tag with classes which you can add as an optional parameter of function, example:
 				<p></p>
 				<code>
-					the_wp_post_image('big-image home');
+					the_post_image('big-image home');
 				</code>
 			</p>
 			<p>
-				2) <code>get_wp_post_image($post_id, $alt)</code> <br>
+				2) <code>get_post_image($post_id, $alt)</code> <br>
 				Function returns url to image. $post_id is required parameter, if optional parameter $alt is true, then function returns array where first item is image url, second item is alt text for image. By default $alt set in false, so function returns just image url, example:
 				<p></p>
 				<code>
-					$data = get_wp_post_image(get_the_ID(), true);
+					$data = get_post_image(get_the_ID(), true);
 					$image = $data[0];
 					$alt = $data[1];		
 				</code>
 				<p>or</p>
 				<code>
-					$image = get_wp_post_image(get_the_ID());	
+					$image = get_post_image(get_the_ID());	
 				</code>
 			</p>
 			<p>
@@ -134,20 +134,20 @@ function wp_post_image_options_page(){
 	<?php
 }
 
-function the_wp_post_image($classes='') {
+function the_post_image($classes='') {
 	$classes = (string)$classes;
 	if (get_the_post_thumbnail() != '') {
 		$attrs = array('class'=>$classes);
 		the_post_thumbnail('large', $attrs); 
 	}else {
-		$data = get_wp_post_image(get_the_ID(), true);
+		$data = get_post_image(get_the_ID(), true);
 		$img = $data[0];
 		$alt = $data[1];
 		echo '<img class="'.$classes.'" src="'.$img.'" alt="'.$alt.'">';
 	}
 }
 
-function get_wp_post_image($post_id, $inside=false){
+function get_post_image($post_id, $inside=false){
 	if (get_the_post_thumbnail() != '') {
 		$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));
 	} else {
