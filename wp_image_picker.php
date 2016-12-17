@@ -107,8 +107,7 @@ if (!function_exists('the_picked_image')) {
 	function the_picked_image($classes='') {
 		$classes = (string)$classes;
 		if (get_the_post_thumbnail() != '') {
-			$attrs = array('class'=>$classes);
-			the_post_thumbnail('large', $attrs); 
+			the_post_thumbnail('large', array('class'=>$classes)); 
 		}else {
 			$data = pick_image(get_the_ID(), true);
 			$img = $data[0];
@@ -120,39 +119,42 @@ if (!function_exists('the_picked_image')) {
 
 if (!function_exists('pick_image')) {
 	function pick_image($post_id, $inside=false){
+		$img = null;
+		
 		if (get_the_post_thumbnail() != '') {
 			$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));
 		} else {
-			$img = '';
-			 $p = array(
-	                   'post_type' => 'attachment',
-			 		  'post_mime_type' => 'image',
-			 		  'numberposts' => 1,
-			 		  'order' => 'ASC',
-			 		  'orderby' => 'ID',
-			 		  'post_status' => null,
-			 		  'post_parent' => $post_id
-	                 );
-			 $attachmentss = get_posts($p);
+			$p = array(
+	            'post_type' => 'attachment',
+				'post_mime_type' => 'image',
+				'numberposts' => 1,
+				'order' => 'ASC',
+				'orderby' => 'ID',
+				'post_status' => null,
+				'post_parent' => $post_id
+	        );
+			$attachmentss = get_posts($p);
 
-			 if ($attachmentss) {
-			 	$imgsrc = wp_get_attachment_image_src($attachmentss[0]->ID, 'full');
+			if (!empty($attachmentss)) {
+				$imgsrc = wp_get_attachment_image_src($attachmentss[0]->ID, 'full');
 			 	$img = $imgsrc[0];
 				$alt = $attachmentss[0]->post_name;
-			 }
+			}
 
-			 if($img==''){
-			 	$post = get_posts('p='.$post_id);
+			if($img==''){
+				$post = get_posts('p='.$post_id);
 				$match_count = preg_match_all("/<img[^']*?src=\"([^']*?)\"[^']*?>/", $post[0]->post_content, $match_array, PREG_PATTERN_ORDER);		
 			 	$img = $match_array[1][0];
 				$alt = $post[0]->post_date;
-			 }
+			}
 
-			 if ($img=='') {
+			if ($img=='') {
 				$img = get_option('wp_pi_defsrc');
 				$alt = time();
 			}
-		 }
+		}
+
+		$img = ($img == null) ? '' : $img ;
 
 		if($inside)
 			return array($img, $alt);
