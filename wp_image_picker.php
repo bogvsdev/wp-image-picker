@@ -41,45 +41,10 @@ function wp_image_picker_options_page(){
 		<?php if($updated) { ?>
 		<div id="message" class="updated"><p>Changes are successfully saved.</p></div>
 		<?php } ?>
-		<div class="info">
-			<p>
-				Plugin by default searching for any kind of image in post (pasted image, uploaded image or thumbnail), but if nothing found, then plugin prints image by default, which you can upload or paste link to it by yourself.
-				Supported formats of images:jpg, jpeg, bmp, png.
-			</p>
-			<p>
-				In order to use plugin in your template pick appropriate function.
-			</p>
-			<p>
-				1) <code>the_picked_image($classes)</code> <br>
-				Use this function in loop. Function prints img tag with classes which you can add as an optional parameter of function, example:
-				<p></p>
-				<code>
-					the_picked_image('big-image home');
-				</code>
-			</p>
-			<p>
-				2) <code>pick_image($post_id, $alt)</code> <br>
-				Function returns url to image. $post_id is required parameter, if optional parameter $alt is true, then function returns array where first item is image url, second item is alt text for image. By default $alt set in false, so function returns just image url, example:
-				<p></p>
-				<code>
-					$data = pick_image(get_the_ID(), true);
-					$image = $data[0];
-					$alt = $data[1];		
-				</code>
-				<p>or</p>
-				<code>
-					$image = pick_image(get_the_ID());	
-				</code>
-			</p>
-			<p>
-				If you have got any troubles with plugin, please, write me in twitter <a href="http://twitter.com/bogvsdev" target="_blank">@bogvsdev</a> .
-			</p>
-			
-		</div>
 		<form name='form' method='post' action=''>
 			<table width='100%' border='0' cellspacing='0' cellpadding='0'>
 				<tr>
-					<th width='30%'><strong>Default image (if image doesn't exist in post): </strong></th>
+					<th width='30%' style="text-align: left;"><strong>Default image (if no image in post): </strong></th>
 					<td width='70%'>
 						<input type="text" name="wp_pi_defsrc" id="wp_pi_defsrc" class="regular-text" value='<?php echo $wp_pi_defsrc; ?>'>
     					<input type="button" name="upload-btn" id="upload-btn" class="button-secondary" value="Upload Image">
@@ -97,6 +62,8 @@ function wp_image_picker_options_page(){
 	</div>
 	<style>
 	#imgrw {
+		width: 350px;
+    	height: auto;
 		margin: 15px 0px;
 		box-shadow: 0 0 40px rgba(0,0,0,.1);
 	}
