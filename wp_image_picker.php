@@ -7,10 +7,13 @@ Version: 1.0
 Author: bogvsdev
 Author URI: http://bdev.it
 */
+
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+
 add_action('admin_menu', 'wp_image_picker_menu');
 
 function wp_image_picker_menu(){
-	add_options_page('WP Image Picker settings', 'WP Image Picker', 'administartor', basename(__FILE__), 'wp_image_picker_options_page');
+	add_options_page('WP Image Picker settings', 'WP Image Picker', 'administrator', basename(__FILE__), 'wp_image_picker_options_page');
 }
 
 function wp_image_picker_options_page(){
@@ -153,6 +156,7 @@ if (!function_exists('pick_image')) {
 		if (get_the_post_thumbnail() != '') {
 			$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));
 		} else {
+			$img = '';
 			 $p = array(
 	                   'post_type' => 'attachment',
 			 		  'post_mime_type' => 'image',
