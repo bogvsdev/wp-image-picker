@@ -1,20 +1,19 @@
 <?php 
 /*
-Plugin Name: WP Get Post Image
-Plugin URI: http://github/url
-Description: Plugin displays featured image or thumbnail from post in template. Prints img tag or returns url to image
+Plugin Name: WP Image Picker
+Plugin URI: https://github.com/bogvsdev/wp-image-picker
+Description: Useful plugin for displaying featured image from post. You may use thumbnails or just insert image to post, WP Image Picker will pick it up for you and dispaly wherever you need!
 Version: 1.0
-Author: Bogdan Dever
-Author URI: http://www.twitter.com/bogvsdev
+Author: bogvsdev
+Author URI: http://bdev.it
 */
-add_action('admin_menu', 'wp_get_post_image_menu');
+add_action('admin_menu', 'wp_image_picker_menu');
 
-
-function wp_get_post_image_menu(){
-	add_options_page('WP Get Post Image settings', 'WP Get Post Image', 8, basename(__FILE__), 'wp_get_post_image_options_page');
+function wp_image_picker_menu(){
+	add_options_page('WP Image Picker settings', 'WP Image Picker', 'administartor', basename(__FILE__), 'wp_image_picker_options_page');
 }
 
-function wp_get_post_image_options_page(){
+function wp_image_picker_options_page(){
 	$updated = false;
 	if ($_POST) {
 		update_option('wp_pi_defsrc', $_POST['wp_pi_defsrc']);
@@ -35,9 +34,9 @@ function wp_get_post_image_options_page(){
 	wp_enqueue_script('jquery');
 	wp_enqueue_media();
 	?>
-	<div class="wrap"><h2>WP Get Post Image settings</h2>
+	<div class="wrap"><h2>WP Image Picker settings</h2>
 		<?php if($updated) { ?>
-		<div id="message" class="updated"><p>Changes successfully saved.</p></div>
+		<div id="message" class="updated"><p>Changes are successfully saved.</p></div>
 		<?php } ?>
 		<div class="info">
 			<p>
@@ -48,25 +47,25 @@ function wp_get_post_image_options_page(){
 				In order to use plugin in your template pick appropriate function.
 			</p>
 			<p>
-				1) <code>the_post_image($classes)</code> <br>
+				1) <code>the_picked_image($classes)</code> <br>
 				Use this function in loop. Function prints img tag with classes which you can add as an optional parameter of function, example:
 				<p></p>
 				<code>
-					the_post_image('big-image home');
+					the_picked_image('big-image home');
 				</code>
 			</p>
 			<p>
-				2) <code>get_post_image($post_id, $alt)</code> <br>
+				2) <code>pick_image($post_id, $alt)</code> <br>
 				Function returns url to image. $post_id is required parameter, if optional parameter $alt is true, then function returns array where first item is image url, second item is alt text for image. By default $alt set in false, so function returns just image url, example:
 				<p></p>
 				<code>
-					$data = get_post_image(get_the_ID(), true);
+					$data = pick_image(get_the_ID(), true);
 					$image = $data[0];
 					$alt = $data[1];		
 				</code>
 				<p>or</p>
 				<code>
-					$image = get_post_image(get_the_ID());	
+					$image = pick_image(get_the_ID());	
 				</code>
 			</p>
 			<p>
@@ -134,55 +133,59 @@ function wp_get_post_image_options_page(){
 	<?php
 }
 
-function the_post_image($classes='') {
-	$classes = (string)$classes;
-	if (get_the_post_thumbnail() != '') {
-		$attrs = array('class'=>$classes);
-		the_post_thumbnail('large', $attrs); 
-	}else {
-		$data = get_post_image(get_the_ID(), true);
-		$img = $data[0];
-		$alt = $data[1];
-		echo '<img class="'.$classes.'" src="'.$img.'" alt="'.$alt.'">';
+if (!function_exists('the_picked_image')) {
+	function the_picked_image($classes='') {
+		$classes = (string)$classes;
+		if (get_the_post_thumbnail() != '') {
+			$attrs = array('class'=>$classes);
+			the_post_thumbnail('large', $attrs); 
+		}else {
+			$data = pick_image(get_the_ID(), true);
+			$img = $data[0];
+			$alt = $data[1];
+			echo '<img class="'.$classes.'" src="'.$img.'" alt="'.$alt.'">';
+		}
 	}
 }
 
-function get_post_image($post_id, $inside=false){
-	if (get_the_post_thumbnail() != '') {
-		$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));
-	} else {
-		 $p = array(
-                   'post_type' => 'attachment',
-		 		  'post_mime_type' => 'image',
-		 		  'numberposts' => 1,
-		 		  'order' => 'ASC',
-		 		  'orderby' => 'ID',
-		 		  'post_status' => null,
-		 		  'post_parent' => $post_id
-                 );
-		 $attachmentss = get_posts($p);
+if (!function_exists('pick_image')) {
+	function pick_image($post_id, $inside=false){
+		if (get_the_post_thumbnail() != '') {
+			$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));
+		} else {
+			 $p = array(
+	                   'post_type' => 'attachment',
+			 		  'post_mime_type' => 'image',
+			 		  'numberposts' => 1,
+			 		  'order' => 'ASC',
+			 		  'orderby' => 'ID',
+			 		  'post_status' => null,
+			 		  'post_parent' => $post_id
+	                 );
+			 $attachmentss = get_posts($p);
 
-		 if ($attachmentss) {
-		 	$imgsrc = wp_get_attachment_image_src($attachmentss[0]->ID, 'full');
-		 	$img = $imgsrc[0];
-			$alt = $attachmentss[0]->post_name;
+			 if ($attachmentss) {
+			 	$imgsrc = wp_get_attachment_image_src($attachmentss[0]->ID, 'full');
+			 	$img = $imgsrc[0];
+				$alt = $attachmentss[0]->post_name;
+			 }
+
+			 if($img==''){
+			 	$post = get_posts('p='.$post_id);
+				$match_count = preg_match_all("/<img[^']*?src=\"([^']*?)\"[^']*?>/", $post[0]->post_content, $match_array, PREG_PATTERN_ORDER);		
+			 	$img = $match_array[1][0];
+				$alt = $post[0]->post_date;
+			 }
+
+			 if ($img=='') {
+				$img = get_option('wp_pi_defsrc');
+				$alt = time();
+			}
 		 }
 
-		 if($img==''){
-		 	$post = get_posts('p='.$post_id);
-			$match_count = preg_match_all("/<img[^']*?src=\"([^']*?)\"[^']*?>/", $post[0]->post_content, $match_array, PREG_PATTERN_ORDER);		
-		 	$img = $match_array[1][0];
-			$alt = $post[0]->post_date;
-		 }
-
-		 if ($img=='') {
-			$img = get_option('wp_pi_defsrc');
-			$alt = time();
-		}
-	 }
-
-	if($inside)
-		return array($img, $alt);
-	return $img;
+		if($inside)
+			return array($img, $alt);
+		return $img;
+	}
 }
 ?>
