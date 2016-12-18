@@ -1,27 +1,40 @@
-WP Image Picker
+=== WP Image Picker ===
+Tags: thumbnail, image, post
+Requires at least: 4.5
+Tested up to: 4.7
+Stable tag: 4.5
 
-Main goal of plugin to display image from post in loop of template. Not all wordpress themes print images from posts as a thumbnail. Almost all themes support only post thumbnails, but not always editor sets post thumbnail. More often we just publish uploaded or external image. WP Image Picker plugin solves this problem.
+Useful plugin for displaying image associated with post whether it's thumbnail, uploaded or just pasted image.
 
-Plugin by default searches for any kind of image in post (pasted image, uploaded image or thumbnail), but if nothing found, then plugin displays image by default, which you can upload or paste link to by yourself in plugin settings.
+== Description ==
+
+This is a plugin for Wordpress that makes it easy to to display image from post in your template. Not all wordpress themes display images from posts as a thumbnail. Almost all themes support only post thumbnails, but editor not always sets post thumbnail. More often we just publish uploaded or external image. WP Image Picker plugin solves this problem.
+
+Plugin by default searches for any kind of image in post (pasted image, uploaded image or thumbnail), but if nothing found, then plugin displays image by default, which you can upload or paste link to by yourself on plugin's setting page.
+
 Supported formats of images: jpg, jpeg, bmp, png.
 
-In order to use plugin in your template choose appropriate function.
 
-1) the_picked_image($classes)
-Use this function in loop. Function prints img tag with classes which you can add as an optional parameter of function, example:
+== Installation ==
 
-the_picked_image('big-image home');
+1. Upload WP Image Picker /wp-content/plugins/
+2. Activate Video Embedder through Wordpress Plugin page
+3. Go to "Settings/WP Image Picker" in your Wordpress install for more information and options
 
-2) pick_image($post_id, $alt)
-Function returns url to image. $post_id is required parameter, if optional parameter $alt is true, then function returns array where first item is image url, second item is alt text for image. By default $alt set in false, so function returns just image url, example:
+== Frequently Asked Questions ==
 
-$data = pick_image(get_the_ID(), true);
-$image = $data[0];
-$alt = $data[1];        
+= How can I support your plugin? =
 
-or
+The easiest way you can support the plugin is by spreading the word.
 
-$image = pick_image(get_the_ID());
+== Screenshots ==
 
+1. Easy image displaying
 
-If you have got any troubles with plugin, please, write me in twitter @bogvsdev
+== Feedback ==
+
+Are you missing a feature? Have you encountered any problem with the plugin? Then write me in twitter <a href="http://twitter.com/bogvsdev">@bogvsdev</a>.
+
+== Changelog ==
+
+* Initial release

@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Image Picker
 Plugin URI: https://github.com/bogvsdev/wp-image-picker
-Description: Useful plugin for displaying image associated with post whether it's thumbnail, uploaded or just pasted image
+Description: Useful plugin for displaying image associated with post whether it's thumbnail, uploaded or just pasted image.
 Version: 1.0
 Author: bogvsdev
 Author URI: http://bdev.it
