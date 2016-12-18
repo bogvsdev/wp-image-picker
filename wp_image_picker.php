@@ -124,16 +124,15 @@ if (!function_exists('pick_image')) {
 		if (get_the_post_thumbnail() != '') {
 			$img = wp_get_attachment_url(get_post_thumbnail_id($post_id));
 		} else {
-			$p = array(
+			$attachmentss = get_posts(array(
 	            'post_type' => 'attachment',
 				'post_mime_type' => 'image',
 				'numberposts' => 1,
 				'order' => 'ASC',
 				'orderby' => 'ID',
 				'post_status' => null,
-				'post_parent' => $post_id
-	        );
-			$attachmentss = get_posts($p);
+				'post_parent' => (int)$post_id
+	        ));
 
 			if (!empty($attachmentss)) {
 				$imgsrc = wp_get_attachment_image_src($attachmentss[0]->ID, 'full');
