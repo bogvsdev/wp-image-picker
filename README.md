@@ -1,5 +1,7 @@
 # WP Image Picker
 
+You can download files from this page, or install form WordPress plugin search https://wordpress.org/plugins/wp-image-picker/
+
 Main goal of plugin to display image from post in loop of template. Not all wordpress themes print images from posts as a thumbnail. Almost all themes support only post thumbnails, but not always editor sets post thumbnail. More often we just publish uploaded or external image. WP Image Picker plugin solves this problem.
 
 Plugin by default searches for any kind of image in post (pasted image, uploaded image or thumbnail), but if nothing found, then plugin displays image by default, which you can upload or paste link to by yourself in plugin settings.
@@ -26,7 +28,4 @@ or
 $image = pick_image(get_the_ID());
 ```
 
-
-
 If you have got any troubles with plugin, please, write me in twitter [@bogvsdev](http://twitter.com/bogvsdev).
-			
